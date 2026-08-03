@@ -40,6 +40,8 @@
         .bar { height: 100%; width: 40%; background: linear-gradient(90deg, #3b82f6, #6366f1); border-radius: 99px; animation: slide 1.5s ease-in-out infinite; }
         @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
 
+        .loading-text { color: #64748b; font-size: 13px; font-family: 'Segoe UI', sans-serif; }
+
         iframe {
             position: fixed; inset: 0;
             width: 100%; height: 100%;
@@ -59,18 +61,37 @@
         <div class="title">Jurnal Mengajar Digital</div>
         <div class="subtitle">SMP Al-Irsyad Bogor</div>
         <div class="bar-wrap"><div class="bar"></div></div>
-        <div style="color:#64748b; font-size:13px; font-family:'Segoe UI',sans-serif;">Memuat aplikasi...</div>
+        <div class="loading-text" id="loading-text">Memuat aplikasi...</div>
     </div>
 
     <iframe
         id="app-frame"
-        src="https://script.google.com/macros/s/AKfycbwBclyQ49AqarV5EoCMW4bgG4dl-MwEpwXi7rn8V2Cv8COuwJzaB6geVrd2dqIY1ZnWLA/exec?authuser=0"
+        src=""
         title="Jurnal Mengajar Digital"
         allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"
         onload="onLoaded()"
     ></iframe>
 
     <script>
+        const APP_URL = 'https://script.google.com/macros/s/AKfycbwBclyQ49AqarV5EoCMW4bgG4dl-MwEpwXi7rn8V2Cv8COuwJzaB6geVrd2dqIY1ZnWLA/exec?authuser=0';
+
+        // Deteksi perangkat mobile
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                || window.innerWidth < 768;
+        }
+
+        if (isMobile()) {
+            // Pada mobile: langsung redirect ke URL GAS (tanpa iframe)
+            document.getElementById('loading-text').textContent = 'Mengalihkan ke aplikasi...';
+            setTimeout(() => {
+                window.location.replace(APP_URL);
+            }, 1200);
+        } else {
+            // Pada desktop: tampilkan via iframe
+            document.getElementById('app-frame').src = APP_URL;
+        }
+
         function onLoaded() {
             document.getElementById('app-frame').classList.add('loaded');
             setTimeout(() => {
@@ -78,8 +99,11 @@
                 if (s) { s.classList.add('fade-out'); setTimeout(() => s.remove(), 650); }
             }, 500);
         }
-        // Fallback jika onload tidak terpanggil
-        setTimeout(onLoaded, 8000);
+
+        // Fallback jika onload tidak terpanggil (desktop)
+        if (!isMobile()) {
+            setTimeout(onLoaded, 8000);
+        }
     </script>
 </body>
 </html>
