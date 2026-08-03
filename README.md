@@ -1,4 +1,4 @@
-# 📚 Jurnal Mengajar Digital — SMP Al-Irsyad Bogor
+# 📚 Jurnal Mengajar Digital
 
 Aplikasi pencatatan jurnal mengajar digital berbasis **Google Apps Script** untuk guru SMP Al-Irsyad Bogor. Diakses melalui **GitHub Pages** sebagai wrapper iframe.
 
